@@ -1,11 +1,31 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>螢幕錄影示例</title>
+    <meta charset="UTF-8">
+    <title>MeetRecAI</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <button id="startRecording">開始錄影</button>
-    <button id="stopRecording" disabled>停止錄影</button>
+    <div class="container">
+        <div class="title">MeetRecAI</div>
+        <!-- 录制控制按钮 -->
+        <div class="controls">
+            <button id="startRecordingBtn">開始錄製</button>
+            <button id="stopRecordingBtn" disabled>停止錄製</button>
+        </div>
+        <!-- 语言选择和文件上传 -->
+        <div class="file-upload" style="margin-top: 20px;">            
+            <input type="file" id="fileInput">
+            <button id="uploadBtn">上傳錄影檔案</button>
+        </div>
+        <!-- 进度条和上传状态 -->
+        <div id="progressContainer">
+            <div id="progressBar">0%</div>
+        </div>
+        <div id="uploadStatus"></div>
+        <!-- 下载解析完成文件按钮，初始时禁用 -->
+        <button id="downloadParsedFileBtn" disabled>下載解析完成文件</button>
+    </div>
     <script src="script.js"></script>
 </body>
 </html>
