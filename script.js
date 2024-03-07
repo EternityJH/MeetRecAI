@@ -226,9 +226,9 @@ document.getElementById('downloadParsedFileBtn').onclick = async function() {
             }
         });
 
-        if (fileInfoResponse.ok) {
-            const fileInfo = await fileInfoResponse.json();
-            const zipFileName = fileInfo.zip_file_name; // 從響應中獲取文件名
+        // if (fileInfoResponse.ok) {
+        //     const fileInfo = await fileInfoResponse.json();
+        //     const zipFileName = fileInfo.zip_file_name; // 從響應中獲取文件名
 
             // 然後使用文件名信息下載文件
             const downloadResponse = await fetch(`${baseUrl}/download-directory`, {
@@ -237,7 +237,7 @@ document.getElementById('downloadParsedFileBtn').onclick = async function() {
                     'Authorization': 'Bearer ' + token
                 }
             });
-
+            const zipFileName = 'output.zip';
             if (downloadResponse.ok) {
                 const blob = await downloadResponse.blob();
                 const url = window.URL.createObjectURL(blob);
@@ -250,11 +250,46 @@ document.getElementById('downloadParsedFileBtn').onclick = async function() {
             } else {
                 alert('下載失敗');
             }
-        } else {
-            alert('獲取文件信息失敗');
-        }
+        // } else {
+        //     alert('獲取文件信息失敗');
+        // }
     } catch (error) {
         console.error('Error:', error);
         alert('請求過程中發生錯誤');
     }
 };
+
+
+// // 下载解析后的文件
+// document.getElementById('downloadParsedFileBtn').onclick = async function() {
+//     const baseUrl = document.getElementById('ipInput').value;
+//     const token = document.getElementById('tokenInput').value; // 获取 token
+
+//     try {
+//         // 直接使用文件下载API
+//         const downloadResponse = await fetch(`${baseUrl}/download-directory`, {
+//             method: 'GET',
+//             headers: {
+//                 'Authorization': 'Bearer ' + token
+//             }
+//         });
+
+//         if (downloadResponse.ok) {
+//             const blob = await downloadResponse.blob();
+//             const url = window.URL.createObjectURL(blob);
+//             const a = document.createElement('a');
+//             a.href = url;
+
+//             // 由于不从服务器获取文件名，这里需要提前定义或使用静态文件名
+//             a.download = 'downloaded_file.zip'; // 静态或预定义的文件名
+//             document.body.appendChild(a);
+//             a.click();
+//             window.URL.revokeObjectURL(url);
+//         } else {
+//             alert('下载失败');
+//         }
+//     } catch (error) {
+//         console.error('Error:', error);
+//         alert('请求过程中发生错误');
+//     }
+// };
