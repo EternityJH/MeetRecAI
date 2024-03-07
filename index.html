@@ -6,25 +6,90 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div class="container">
-        <div class="title">MeetRecAI</div>
-        <!-- 录制控制按钮 -->
-        <div class="controls">
-            <button id="startRecordingBtn">開始錄製</button>
-            <button id="stopRecordingBtn" disabled>停止錄製</button>
+    <div class="main-container">
+        <!-- 左側教學步驟區 -->
+        <div class="tutorial-container">
+            <h2>操作步驟</h2>
+            <ol>
+                <li>開始螢幕錄影會議(可參考右方影片設置)。</li>
+                <li>輸入運算伺服器IP、Token、會議參與人數。</li>
+                <li>上傳錄影檔案開始分析(一般影片亦可)，若出現"Failed to fetch"表示伺服器出現錯誤，請重新整理後重複2再上傳嘗試。</li>
+                <li>下載解析結果壓縮檔。</li>                
+                <li>將含有"_intg"後綴的srt檔案丟給chatgpt4，並複製以下訊息輸出會議紀錄。</li>
+            </ol>
+            <!-- 複製訊息窗格 -->
+            <textarea id="copyText" readonly>
+這裡是可以供使用者複製的訊息。
+這裡是可以供使用者複製的訊息。
+這裡是可以供使用者複製的訊息。
+這裡是可以供使用者複製的訊息。
+這裡是可以供使用者複製的訊息。
+這裡是可以供使用者複製的訊息。
+                </textarea>
+            <div class="flex-container">
+                <button onclick="copyText()">複製文字</button>
+            </div>
         </div>
-        <!-- 语言选择和文件上传 -->
-        <div class="file-upload" style="margin-top: 20px;">            
-            <input type="file" id="fileInput">
-            <button id="uploadBtn">上傳錄影檔案</button>
+
+        <!-- 中央操作區 -->
+        <div class="container">
+            <div class="title">MeetRecAI</div>
+            
+            <!-- 標題下分隔符號 -->
+            <hr>
+            
+            <!-- 螢幕錄影區 -->
+            <div class="section" id="recordingSection">
+                <h2>1. 先螢幕錄影</h2>
+                <button id="startRecordingBtn">開始錄影</button>
+                <button id="stopRecordingBtn" disabled>停止錄影</button>
+            </div>
+            
+            <!-- 螢幕錄影區分隔符號 -->
+            <hr>
+            
+            <!-- 錄影檔案上傳區 -->
+            <div class="section" id="uploadSection">
+                <h2>2. 上傳螢幕錄影輸出字幕</h2>
+
+                <!-- IP 輸入區 -->
+                <div class="input-group">
+                    <input type="text" id="ipInput" placeholder="請輸入 IP 地址">
+                </div>
+
+                <!-- Token 輸入區 -->
+                <div class="input-group">
+                    <input type="password" id="tokenInput" placeholder="請輸入 Token">
+                </div>
+                
+                <!-- 輸入參與者數量 -->
+                <div>
+                    <label for="participantsInput">參與者數量：</label>
+                    <input type="number" id="participantsInput" placeholder="輸入數量">
+                </div>
+                
+                <input type="file" id="fileInput">
+                <button id="uploadBtn">上傳檔案</button>
+                <div id="progressContainer">
+                    <div id="progressBar">0%</div>
+                </div>
+                <div id="uploadStatus"></div>
+            </div>
+
+            
+            <!-- 錄影檔案上傳區分隔符號 -->
+            <hr>
+            
+            <!-- 下載解析完成文件按鈕，初始時禁用 -->
+            <button id="downloadParsedFileBtn">下載解析完成文件</button>
         </div>
-        <!-- 进度条和上传状态 -->
-        <div id="progressContainer">
-            <div id="progressBar">0%</div>
+
+        <!-- 影片區容器 -->
+        <div class="video-container">
+            <iframe width="560" height="560" src="" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
         </div>
-        <div id="uploadStatus"></div>
-        <!-- 下载解析完成文件按钮，初始时禁用 -->
-        <button id="downloadParsedFileBtn" disabled>下載解析完成文件</button>
+
+
     </div>
     <script src="script.js"></script>
 </body>
