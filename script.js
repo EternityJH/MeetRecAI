@@ -119,7 +119,7 @@ startRecordingBtn.onclick = startRecording;
 stopRecordingBtn.onclick = stopRecording;
 
 async function uploadFile() {
-    const ip = document.getElementById('ipInput').value; // 獲取 IP 地址
+    const uploadBtn = document.getElementById('uploadBtn'); // 獲取上傳按鈕
     const token = document.getElementById('tokenInput').value; // 獲取 token
     const file = document.getElementById('fileInput').files[0];
     const formData = new FormData();
@@ -128,7 +128,7 @@ async function uploadFile() {
     formData.append('file', file);
 
     // 使用動態 IP 構建 API URL
-    const baseUrl = `http://${ip}:5000`;
+    const baseUrl = document.getElementById('ipInput').value;
     const steps = [
         { url: `${baseUrl}/convert-video-to-audio`, message: '影片轉音檔完成，音檔轉文字進行中...' },
         { url: `${baseUrl}/process-audio-to-text`, message: '音檔轉文字完成，分辨發話者進行中...' },
@@ -144,6 +144,9 @@ async function uploadFile() {
         },
         { url: `${baseUrl}/integrate-speaker-info-to-text`, message: '檔案整合完成' },
     ];
+
+    // 在上傳開始時禁用上傳按鈕
+    uploadBtn.disabled = true;
 
     // 上傳文件
     try {
@@ -183,6 +186,9 @@ async function uploadFile() {
     } catch (error) {
         console.error("過程中出現錯誤：", error);
         document.getElementById('uploadStatus').textContent = error.message;
+    } finally {
+        // 無論上傳成功或失敗，最後都重新啟用上傳按鈕
+        uploadBtn.disabled = false;
     }
 }
 
@@ -208,8 +214,7 @@ function copyText() {
 
 // 下載解析後的檔案
 document.getElementById('downloadParsedFileBtn').onclick = async function() {
-    const ip = document.getElementById('ipInput').value; // 從 IP 輸入欄位獲取 IP 地址
-    const baseUrl = `http://${ip}:5000`; // 使用動態 IP 構建 API URL
+    const baseUrl = document.getElementById('ipInput').value;
     const token = document.getElementById('tokenInput').value; // 獲取 token
 
     // 首先獲取文件信息
