@@ -7,7 +7,7 @@ body {
 }
 
 .container {
-    width: 30%;
+    width: 25%;
     padding: 20px;
     border: 1px solid #ccc;
     border-radius: 8px;
@@ -23,10 +23,18 @@ body {
     margin-bottom: 15px;
 }
 
+/* Style for the upload controls container */
+.upload-controls {
+    display: flex;
+    justify-content: center; /* Center horizontally */
+    align-items: center; /* Center vertically */
+}
+
 #progressContainer {
-    width: 100%;
+    width: 75%;
     background-color: #ddd;
-    margin-bottom: 15px;
+    margin: 15px auto;
+    border-radius: 8px;
 }
 
 #progressBar {
@@ -36,4 +44,56 @@ body {
     text-align: center;
     line-height: 30px;
     color: white;
+}
+
+#tokenInput {
+    width: 60%; /* Adjust the width as needed */
+    padding: 8px; /* Optional: Adjust padding for better appearance */
+    margin-bottom: 15px; /* Adds some space below the input field */
+}
+
+#ipInput {
+    width: 60%; /* Adjust the width as needed */
+    padding: 8px; /* Optional: Adjust padding for better appearance */
+    margin-bottom: 15px; /* Adds some space below the input field */
+}
+
+#participantsInput {
+    width: 10%;    
+    padding: 4px; /* Optional: Adjust padding for better appearance */
+    margin: 5px auto;
+    margin-bottom: 15px;
+}
+
+.main-container {
+    display: flex;
+    justify-content: space-between; /* 確保左側教學和右側主內容有間隔 */
+    width: 100%; /* 確保整體容器寬度 */
+}
+
+.tutorial-container {
+    flex: 2; /* 讓教學區佔用可用空間 */
+    margin-right: 20px; /* 加入間隔以避免與主內容貼得太近 */    
+    width: 80%; /* 從原來的寬度調整為更寬 */
+}
+
+.video-container {
+    flex: 2; /* 讓教學區佔用可用空間 */
+    margin-left: 20px; /* 加入間隔以避免與主內容貼得太近 */
+    height: 100%; /* 讓影片高度填滿容器 */    
+}
+
+.container {
+    flex: 3; /* 讓主內容區相對更大一些 */
+}
+
+#copyText {
+    width: 100%; /* 讓 textarea 寬度填滿容器 */
+    margin-top: 15px;
+    height: 40%; /* 可調整高度 */
+}
+
+.flex-container {
+    display: flex;
+    justify-content: flex-end;
 }
