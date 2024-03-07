@@ -19,53 +19,69 @@ var mediaRecorder;
 var recordedChunks = [];
 
 async function startRecording() {
-    startRecordingBtn.disabled = true;
-    stopRecordingBtn.disabled = false;
+    try {
+        startRecordingBtn.disabled = true;
+        stopRecordingBtn.disabled = false;
 
-    // 獲取屏幕流（包含系統音效）
-    const displayStream = await navigator.mediaDevices.getDisplayMedia({
-        video: true,
-        audio: true // 確保包含系統音效
-    });
+        // 獲取屏幕流（包含系統音效）
+        const displayStream = await navigator.mediaDevices.getDisplayMedia({
+            video: true,
+            audio: true // 確保包含系統音效
+        });
 
-    // 獲取麥克風流
-    const microphoneStream = await navigator.mediaDevices.getUserMedia({
-        audio: true
-    });
-
-    // 混合音頻流
-    const audioContext = new AudioContext();
-    const microphoneSource = audioContext.createMediaStreamSource(microphoneStream);
-    const displaySource = audioContext.createMediaStreamSource(displayStream);
-    const destination = audioContext.createMediaStreamDestination();
-    microphoneSource.connect(destination);
-    displaySource.connect(destination);
-
-    // 混合屏幕流和音頻流
-    const mixedStream = new MediaStream([...displayStream.getVideoTracks(), ...destination.stream.getTracks()]);
-
-    // 使用MediaRecorder開始錄製
-    mediaRecorder = new MediaRecorder(mixedStream);
-    mediaRecorder.ondataavailable = (event) => {
-        if (event.data.size > 0) {
-            recordedChunks.push(event.data);
+        // 確認是否包含音訊軌道
+        if (!displayStream.getAudioTracks().length) {
+            throw new Error("螢幕分享未包含系統音訊。請確保已開啟系統音訊分享。");
         }
-    };
-    mediaRecorder.start();
 
-    // 監聽錄製停止事件
-    mediaRecorder.onstop = downloadVideo;
+        // 獲取麥克風流
+        const microphoneStream = await navigator.mediaDevices.getUserMedia({
+            audio: true
+        });
+
+        // 混合音頻流
+        const audioContext = new AudioContext();
+        const microphoneSource = audioContext.createMediaStreamSource(microphoneStream);
+        const displaySource = audioContext.createMediaStreamSource(displayStream);
+        const destination = audioContext.createMediaStreamDestination();
+        microphoneSource.connect(destination);
+        displaySource.connect(destination);
+
+        // 混合屏幕流和音頻流
+        const mixedStream = new MediaStream([...displayStream.getVideoTracks(), ...destination.stream.getTracks()]);
+
+        // 使用MediaRecorder開始錄製
+        mediaRecorder = new MediaRecorder(mixedStream);
+        recordedChunks = []; // 清空先前的錄製片段
+        mediaRecorder.ondataavailable = (event) => {
+            if (event.data.size > 0) {
+                recordedChunks.push(event.data);
+            }
+        };
+        mediaRecorder.start();
+
+        // 監聽錄製停止事件
+        mediaRecorder.onstop = downloadVideo;
+
+    } catch (error) {
+        console.error('錄製過程中出現錯誤:', error);
+        alert('錄製失敗：' + error.message);
+        startRecordingBtn.disabled = false;
+        stopRecordingBtn.disabled = true;
+    }
 }
 
 // 停止錄製
 function stopRecording() {
+    if (mediaRecorder && mediaRecorder.state !== 'inactive') {
+        mediaRecorder.stop();
+        // 停止所有軌道
+        mediaRecorder.stream.getTracks().forEach(track => track.stop());
+    }
     stopRecordingBtn.disabled = true;
     startRecordingBtn.disabled = false;
-    mediaRecorder.stop();
-
-    // 停止屏幕流和麥克風流
-    displayStream.getTracks().forEach(track => track.stop());
 }
+
 
 // 下載視頻文件
 function downloadVideo() {
