@@ -1,5 +1,7 @@
 https://eternityjh.github.io/MeetRecAI/
 
 Front-end: HTML + JAVA + CSS
-Back-end: FLASK + OpenAI Whisper + pyannote-audio
+
+ngrok for developed URL domain
+hugging face for model to distinguish between speakers
 
